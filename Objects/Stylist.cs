@@ -10,7 +10,7 @@ namespace HairSalon
     private string Name;
 
 
-    public Stylist(string name, int id)
+    public Stylist(string name, int id = 0)
     {
       Id = id;
       Name = name;
@@ -31,6 +31,21 @@ namespace HairSalon
     public void SetName(string name)
     {
       Name = name;
+    }
+
+    public override bool Equals(System.Object otherStylist)
+    {
+      if(!(otherStylist is Stylist))
+      {
+        return false;
+      }
+      else
+      {
+        Stylist newStylist = (Stylist) otherStylist;
+        bool idEquality = this.GetId() == newStylist.GetId();
+        bool nameEquality = this.GetName() == newStylist.GetName();
+        return (idEquality && nameEquality);
+      }
     }
 
     public static List<Stylist> GetAll()

@@ -10,13 +10,15 @@ namespace HairSalon
     private string Name;
     private int StylistId;
     private DateTime AppointmentDate;
+    private string Note;
 
-    public Client(string name, int stylistId, DateTime appointmentDate, int id = 0)
+    public Client(string name, int stylistId, DateTime appointmentDate, string notes, int id = 0)
     {
       Id = id;
       Name = name;
       StylistId = stylistId;
       AppointmentDate = appointmentDate;
+      Note = notes;
     }
 
     public int GetId()
@@ -35,6 +37,10 @@ namespace HairSalon
     {
       return AppointmentDate;
     }
+    public string GetNote()
+    {
+      return Note;
+    }
 
     public void SetId(int id)
     {
@@ -48,10 +54,13 @@ namespace HairSalon
     {
       StylistId = stylistId;
     }
-
     public void SetStylistId(DateTime appointmentDate)
     {
       AppointmentDate = appointmentDate;
+    }
+    public void Setnotes(string notes)
+    {
+      Note = notes;
     }
 
     public override bool Equals(System.Object otherClient)
@@ -67,8 +76,9 @@ namespace HairSalon
           bool nameEquality = this.GetName() == newClient.GetName();
           bool stylistIdEquality = this.GetStylistId() == newClient.GetStylistId();
           bool appointMentDateEquality = this.GetAppointmentDate() == newClient.GetAppointmentDate();
+          bool notesEquality = this.GetNote() == newClient.GetNote();
 
-          return (idEquality && nameEquality && stylistIdEquality && appointMentDateEquality);
+          return (idEquality && nameEquality && stylistIdEquality && appointMentDateEquality && notesEquality);
       }
     }
 
@@ -89,8 +99,9 @@ namespace HairSalon
         string clientName = rdr.GetString(1);
         int clientStylistId = rdr.GetInt32(2);
         DateTime clientAppointmentDate = rdr.GetDateTime(3);
+        string clientNote = rdr.GetString(4);
 
-        Client newClient = new Client(clientName, clientStylistId, clientAppointmentDate, clientId);
+        Client newClient = new Client(clientName, clientStylistId, clientAppointmentDate,  clientNote, clientId);
         allClients.Add(newClient);
       }
 
@@ -111,7 +122,7 @@ namespace HairSalon
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd= new SqlCommand("INSERT INTO clients (name, stylist_id, appointment_date) OUTPUT INSERTED.id VALUES (@ClientName, @ClientStylistId, @ClientAppointmentDate);", conn);
+      SqlCommand cmd= new SqlCommand("INSERT INTO clients (name, stylist_id, appointment_date, note) OUTPUT INSERTED.id VALUES (@ClientName, @ClientStylistId, @ClientAppointmentDate, @ClientNote);", conn);
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@ClientName";
@@ -125,9 +136,14 @@ namespace HairSalon
       appointmentDateParameter.ParameterName = "@ClientAppointmentDate";
       appointmentDateParameter.Value = this.GetAppointmentDate();
 
+      SqlParameter noteParameter = new SqlParameter();
+      noteParameter.ParameterName = "@ClientNote";
+      noteParameter.Value = this.GetNote();
+
       cmd.Parameters.Add(nameParameter);
       cmd.Parameters.Add(stylistIdParameter);
       cmd.Parameters.Add(appointmentDateParameter);
+      cmd.Parameters.Add(noteParameter);
 
       rdr = cmd.ExecuteReader();
 
@@ -163,6 +179,7 @@ namespace HairSalon
       string foundClientName = null;
       int foundClientStylistId = 0;
       DateTime foundClientAppointmentDate = new DateTime();
+      string foundClientNote = null;
 
       while(rdr.Read())
       {
@@ -170,8 +187,9 @@ namespace HairSalon
         foundClientName = rdr.GetString(1);
         foundClientStylistId = rdr.GetInt32(2);
         foundClientAppointmentDate = rdr.GetDateTime(3);
+        foundClientNote = rdr.GetString(4);
       }
-      Client foundClient = new Client(foundClientName, foundClientStylistId, foundClientAppointmentDate, foundClientId);
+      Client foundClient = new Client(foundClientName, foundClientStylistId, foundClientAppointmentDate, foundClientNote, foundClientId);
 
       if(rdr != null)
       {
@@ -184,13 +202,13 @@ namespace HairSalon
       return foundClient;
     }
 
-    public void Update(string newName, DateTime newDate)
+    public void Update(string newName, DateTime newDate, string newNote)
     {
       SqlConnection conn = DB.Connection();
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd= new SqlCommand("UPDATE clients SET name = @NewName, appointment_date = @NewDate OUTPUT INSERTED.name, INSERTED.appointment_date WHERE id = @ClientId;", conn);
+      SqlCommand cmd= new SqlCommand("UPDATE clients SET name = @NewName, appointment_date = @NewDate, note = @NewNote OUTPUT INSERTED.name, INSERTED.appointment_date, INSERTED.note WHERE id = @ClientId;", conn);
 
       SqlParameter newNameParameter = new SqlParameter();
       newNameParameter.ParameterName = "@NewName";
@@ -201,6 +219,11 @@ namespace HairSalon
       newDateParameter.ParameterName = "@NewDate";
       newDateParameter.Value = newDate;
       cmd.Parameters.Add(newDateParameter);
+
+      SqlParameter newNoteParameter = new SqlParameter();
+      newNoteParameter.ParameterName = "@NewNote";
+      newNoteParameter.Value = newNote;
+      cmd.Parameters.Add(newNoteParameter);
 
       SqlParameter clientIdParameter = new SqlParameter();
       clientIdParameter.ParameterName = "@ClientId";
@@ -213,6 +236,7 @@ namespace HairSalon
       {
         this.Name = rdr.GetString(0);
         this.AppointmentDate = rdr.GetDateTime(1);
+        this.Note = rdr.GetString(2);
       }
 
       if(rdr != null)
@@ -262,6 +286,7 @@ namespace HairSalon
       string foundClientName = null;
       int foundClientStylistId = 0;
       DateTime foundClientDate = new DateTime();
+      string foundClientNote = null;
 
       while(rdr.Read())
       {
@@ -269,9 +294,10 @@ namespace HairSalon
         foundClientName = rdr.GetString(1);
         foundClientStylistId = rdr.GetInt32(2);
         foundClientDate = rdr.GetDateTime(3);
+        foundClientNote = rdr.GetString(4);
       }
 
-      Client foundClient = new Client(foundClientName, foundClientStylistId, foundClientDate, foundClientId);
+      Client foundClient = new Client(foundClientName, foundClientStylistId, foundClientDate, foundClientNote, foundClientId);
 
       if(rdr != null)
       {

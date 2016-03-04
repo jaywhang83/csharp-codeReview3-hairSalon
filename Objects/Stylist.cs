@@ -196,8 +196,9 @@ namespace HairSalon
         string clientName = rdr.GetString(1);
         int clientStylistId = rdr.GetInt32(2);
         DateTime clientAppointmentDate = rdr.GetDateTime(3);
+        string clientNote = rdr.GetString(4); 
 
-        Client newClient= new Client(clientName, clientStylistId, clientAppointmentDate, clientId);
+        Client newClient= new Client(clientName, clientStylistId, clientAppointmentDate, clientNote, clientId);
         clients.Add(newClient);
       }
 

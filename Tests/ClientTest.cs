@@ -26,8 +26,8 @@ namespace HairSalon
     public void Test_Equal_overrideTrueForSameName()
     {
       DateTime testDate = new DateTime(2016, 3, 14);
-      Client firstClient = new Client("Joe", 1, testDate);
-      Client secondClient = new Client("Joe", 1, testDate);
+      Client firstClient = new Client("Joe", 1, testDate, "Short hair cut");
+      Client secondClient = new Client("Joe", 1, testDate, "Short hair cut");
 
       Assert.Equal(firstClient, secondClient);
     }
@@ -36,7 +36,7 @@ namespace HairSalon
     public void Test_Save()
     {
       DateTime testDate = new DateTime(2016, 3, 14);
-      Client testClient = new Client("Joe", 1, testDate);
+      Client testClient = new Client("Joe", 1, testDate, "Short hair cut");
 
       testClient.Save();
 
@@ -50,7 +50,7 @@ namespace HairSalon
     public void Test_Save_AssignsIdToObject()
     {
       DateTime testDate = new DateTime(2016, 3, 14);
-      Client testClient = new Client("Joe", 1, testDate);
+      Client testClient = new Client("Joe", 1, testDate, "Short hair cut");
 
       testClient.Save();
 
@@ -67,7 +67,7 @@ namespace HairSalon
     public void Test_Find_FindsClientInDatabase()
     {
       DateTime testDate = new DateTime(2016, 3, 14);
-      Client testClient = new Client("Joe", 1, testDate);
+      Client testClient = new Client("Joe", 1, testDate, "Short hair cut");
       testClient.Save();
 
       Client foundClient = Client.Find(testClient.GetId());
@@ -80,19 +80,22 @@ namespace HairSalon
     {
       string name = "Joe";
       DateTime testDate = new DateTime(2016, 3, 14);
-      Client testClient = new Client(name, 1, testDate);
+      Client testClient = new Client(name, 1, testDate, "Short hair cut");
       testClient.Save();
 
       string newName = "Bob";
       DateTime newDate = new DateTime(2016, 4, 21);
+      string newNote = "Long hair cut";
 
-      testClient.Update(newName, newDate);
+      testClient.Update(newName, newDate, newNote);
 
       string result = testClient.GetName();
       DateTime resultDate = testClient.GetAppointmentDate();
+      string resultNote = testClient.GetNote(); 
 
       Assert.Equal(result, newName);
       Assert.Equal(resultDate, newDate);
+      Assert.Equal(resultNote, newNote);
     }
 
     [Fact]
@@ -107,10 +110,10 @@ namespace HairSalon
       testStylist2.Save();
 
       DateTime testDate = new DateTime(2016, 3, 14);
-      Client testClient1 = new Client("Joe", testStylist1.GetId(), testDate);
+      Client testClient1 = new Client("Joe", testStylist1.GetId(), testDate, "Short hair cut");
       testClient1.Save();
 
-      Client testClient2 = new Client("Mike", testStylist2.GetId(), testDate);
+      Client testClient2 = new Client("Mike", testStylist2.GetId(), testDate, "Long hair cut");
       testClient2.Save();
 
       List<Stylist> resultStylists = Stylist.GetAll();
@@ -136,10 +139,10 @@ namespace HairSalon
       testStylist2.Save();
 
       DateTime testDate = new DateTime(2016, 3, 14);
-      Client testClient1 = new Client("Joe", testStylist1.GetId(), testDate);
+      Client testClient1 = new Client("Joe", testStylist1.GetId(), testDate, "Short hair cut");
       testClient1.Save();
 
-      Client testClient2 = new Client("Mike", testStylist2.GetId(), testDate);
+      Client testClient2 = new Client("Mike", testStylist2.GetId(), testDate, "Long hair cut");
       testClient2.Save();
 
       Client foundClient = Client.Search(testClient2.GetName());
@@ -153,7 +156,7 @@ namespace HairSalon
     public void Dispose()
     {
       Client.DeleteAll();
-      Stylist.DeleteAll(); 
+      Stylist.DeleteAll();
     }
   }
 }

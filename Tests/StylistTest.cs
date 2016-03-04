@@ -90,10 +90,10 @@ namespace HairSalon
 
       DateTime testDate = new DateTime(2016, 3, 14);
 
-      Client firstClient = new Client("Joe", testStylist.GetId(), testDate);
+      Client firstClient = new Client("Joe", testStylist.GetId(), testDate, "Long hair cut");
       firstClient.Save();
 
-      Client secondClient = new Client("Mike", testStylist.GetId(), testDate);
+      Client secondClient = new Client("Mike", testStylist.GetId(), testDate, "Short hair cut");
       secondClient.Save();
 
       List<Client> testClientList = new List<Client> {firstClient, secondClient};
@@ -114,10 +114,10 @@ namespace HairSalon
       testStylist2.Save();
 
       DateTime testDate = new DateTime(2016, 3, 14);
-      Client testClient1 = new Client("Joe", testStylist1.GetId(), testDate);
+      Client testClient1 = new Client("Joe", testStylist1.GetId(), testDate, "Long hair cut");
       testClient1.Save();
 
-      Client testClient2 = new Client("Mike", testStylist2.GetId(), testDate);
+      Client testClient2 = new Client("Mike", testStylist2.GetId(), testDate, "Short hair cut");
       testClient2.Save();
 
       testStylist1.Delete();

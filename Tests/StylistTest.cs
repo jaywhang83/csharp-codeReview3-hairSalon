@@ -57,7 +57,7 @@ namespace HairSalon
     }
 
     [Fact]
-    public void Test_Find_FindsStylistInDatebase()
+    public void Test_Find_FindsStylistInDatabase()
     {
       Stylist testStylist = new Stylist("Mary");
       testStylist.Save();
@@ -68,7 +68,7 @@ namespace HairSalon
     }
 
     [Fact]
-    public void Test_Update_UpdateStylsitInDatebase()
+    public void Test_Update_UpdateStylsitInDatabase()
     {
       string name = "Mary";
       Stylist testStylist = new Stylist(name);
@@ -82,7 +82,26 @@ namespace HairSalon
       Assert.Equal(newName, result);
     }
 
-    
+    [Fact]
+    public void Test_GetClients_RetreiveAllClientsWithStylist()
+    {
+      Stylist testStylist = new Stylist("Mary");
+      testStylist.Save();
+
+      DateTime testDate = new DateTime(2016, 3, 14);
+
+      Client firstClient = new Client("Joe", testStylist.GetId(), testDate);
+      firstClient.Save();
+
+      Client secondClient = new Client("Mike", testStylist.GetId(), testDate);
+      secondClient.Save();
+
+      List<Client> testClientList = new List<Client> {firstClient, secondClient};
+      List<Client> resultClientList  = testStylist.GetClients();
+
+      Assert.Equal(testClientList, resultClientList);
+    }
+
     public void Dispose()
     {
       Stylist.DeleteAll();

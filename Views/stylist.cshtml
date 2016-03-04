@@ -1,0 +1,39 @@
+
+
+<body>
+  <h2>Here are all of the clients for this stylist:</h2>
+
+  @if(@Model["clients"].Count == 0)
+  {
+    <p>No clients have been added yet!</p>
+  }
+  else
+  {
+    <ol>
+      @foreach(var client in @Model["clients"])
+      {
+        <li>@client.GetName()</li>
+          <ul>
+            <li>@client.GetAppointmentDate()</li>
+            <li>@client.GetNote()</li>
+          </ul>
+      }
+    </ol>
+
+      <h1>Add a new client</h1>
+      <form action="/client/add/" method="post">
+        <label for="client-name">Restaurant name:</label>
+        <input id="client-name" name="client-name" type="text">
+        <label for="client-appointment-date">Appointment date:</label>
+        <input id="client-appointment-date" name="client-appointment-date" type="text">
+        <label for="client-note">Notes:</label>
+        <input id="client-note" name="client-note" type="text">
+        <button type="submit">Add a new client</button>
+      </form>
+      <h4><a href="/">Back to main</a></h4>
+      <h4><a href="/clients">View all clients</a></h4>
+
+  }
+  <h4><a href="/client/new">Add a new client</a></h4>
+  <h4><a href="/">Back to main</a></h4>
+</body>

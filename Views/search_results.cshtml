@@ -1,0 +1,25 @@
+
+
+<body>
+  <h2>Here are all of the clients by that name:</h2>
+
+  @if(@Model["clients"].Count == 0)
+  {
+    <p>There are no client by that name</p>
+  }
+  else
+  {
+    <ol>
+      @foreach(var client in @Model["clients"])
+      {
+        <li>@client.GetName()</li>
+          <ul>
+            <li>@client.GetAppointmentDate()</li>
+            <li>@client.GetNote()</li>
+          </ul>
+      }
+      <p>Stylist for this client is @Model["stylists"].GetName()</p>
+    </ol>
+  }
+  <h4><a href="/">Back to main</a></h4>
+</body>

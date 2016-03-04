@@ -269,7 +269,7 @@ namespace HairSalon
       }
     }
 
-    public static Client Search(string name)
+    public static List<Client> Search(string name)
     {
       SqlConnection conn = DB.Connection();
       SqlDataReader rdr = null;
@@ -282,22 +282,23 @@ namespace HairSalon
       cmd.Parameters.Add(clientNameParameter);
       rdr = cmd.ExecuteReader();
 
-      int foundClientId = 0;
-      string foundClientName = null;
-      int foundClientStylistId = 0;
-      DateTime foundClientDate = new DateTime();
-      string foundClientNote = null;
-
+      // int foundClientId = 0;
+      // string foundClientName = null;
+      // int foundClientStylistId = 0;
+      // DateTime foundClientDate = new DateTime();
+      // string foundClientNote = null;
+      List<Client> clients = new List<Client> {};
       while(rdr.Read())
       {
-        foundClientId = rdr.GetInt32(0);
-        foundClientName = rdr.GetString(1);
-        foundClientStylistId = rdr.GetInt32(2);
-        foundClientDate = rdr.GetDateTime(3);
-        foundClientNote = rdr.GetString(4);
-      }
+        int foundClientId = rdr.GetInt32(0);
+        string foundClientName = rdr.GetString(1);
+        int foundClientStylistId = rdr.GetInt32(2);
+        DateTime foundClientDate = rdr.GetDateTime(3);
+        string foundClientNote = rdr.GetString(4);
 
-      Client foundClient = new Client(foundClientName, foundClientStylistId, foundClientDate, foundClientNote, foundClientId);
+        Client foundClient = new Client(foundClientName, foundClientStylistId, foundClientDate, foundClientNote, foundClientId);
+        clients.Add(foundClient);
+      }
 
       if(rdr != null)
       {
@@ -307,10 +308,10 @@ namespace HairSalon
       {
         conn.Close();
       }
-      return foundClient;
+      return clients;
     }
 
-    public  Stylist GetStylist()
+    public Stylist GetStylist()
     {
       SqlConnection conn = DB.Connection();
       SqlDataReader rdr = null;

@@ -91,7 +91,7 @@ namespace HairSalon
 
       string result = testClient.GetName();
       DateTime resultDate = testClient.GetAppointmentDate();
-      string resultNote = testClient.GetNote(); 
+      string resultNote = testClient.GetNote();
 
       Assert.Equal(result, newName);
       Assert.Equal(resultDate, newDate);
@@ -145,11 +145,13 @@ namespace HairSalon
       Client testClient2 = new Client("Mike", testStylist2.GetId(), testDate, "Long hair cut");
       testClient2.Save();
 
-      Client foundClient = Client.Search(testClient2.GetName());
+      List<Client> testList = new List<Client> {testClient2};
+
+      List<Client> foundClient = Client.Search(testClient2.GetName());
 
       Stylist resultStylist = testClient2.GetStylist();
 
-      Assert.Equal(foundClient, testClient2);
+      Assert.Equal(foundClient,testList);
       Assert.Equal(resultStylist, testStylist2);
     }
 

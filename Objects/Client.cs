@@ -184,6 +184,47 @@ namespace HairSalon
       return foundClient;
     }
 
+    public void Update(string newName, DateTime newDate)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr;
+      conn.Open();
+
+      SqlCommand cmd= new SqlCommand("UPDATE clients SET name = @NewName, appointment_date = @NewDate OUTPUT INSERTED.name, INSERTED.appointment_date WHERE id = @ClientId;", conn);
+
+      SqlParameter newNameParameter = new SqlParameter();
+      newNameParameter.ParameterName = "@NewName";
+      newNameParameter.Value = newName;
+      cmd.Parameters.Add(newNameParameter);
+
+      SqlParameter newDateParameter = new SqlParameter();
+      newDateParameter.ParameterName = "@NewDate";
+      newDateParameter.Value = newDate;
+      cmd.Parameters.Add(newDateParameter);
+
+      SqlParameter clientIdParameter = new SqlParameter();
+      clientIdParameter.ParameterName = "@ClientId";
+      clientIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(clientIdParameter);
+
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this.Name = rdr.GetString(0);
+        this.AppointmentDate = rdr.GetDateTime(1);
+      }
+
+      if(rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+    }
+
     public static void DeleteAll()
     {
       SqlConnection conn = DB.Connection();

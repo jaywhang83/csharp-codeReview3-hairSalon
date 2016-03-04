@@ -92,7 +92,36 @@ namespace HairSalon
       DateTime resultDate = testClient.GetAppointmentDate();
 
       Assert.Equal(result, newName);
-      Assert.Equal(resultDate, newDate); 
+      Assert.Equal(resultDate, newDate);
+    }
+
+    [Fact]
+    public void Test_Delete_DeleteClientFromDatabase()
+    {
+      string name1 = "Mary";
+      Stylist testStylist1 = new Stylist(name1);
+      testStylist1.Save();
+
+      string name2 = "Annie";
+      Stylist testStylist2 = new Stylist(name2);
+      testStylist2.Save();
+
+      DateTime testDate = new DateTime(2016, 3, 14);
+      Client testClient1 = new Client("Joe", testStylist1.GetId(), testDate);
+      testClient1.Save();
+
+      Client testClient2 = new Client("Mike", testStylist2.GetId(), testDate);
+      testClient2.Save();
+
+      List<Stylist> resultStylists = Stylist.GetAll();
+      List<Stylist> testStylistList = new List<Stylist> {testStylist1, testStylist2};
+
+      testClient1.Delete();
+      List<Client> resultClients = Client.GetAll();
+      List<Client> testClientList = new List<Client> {testClient2};
+
+      Assert.Equal(resultStylists, testStylistList);
+      Assert.Equal(resultClients, testClientList);
     }
 
     public void Dispose()

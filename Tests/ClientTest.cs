@@ -17,6 +17,7 @@ namespace HairSalon
     public void Test_DatabaseEmptyAtFirst()
     {
       int result = Client.GetAll().Count;
+      Console.WriteLine(result);
 
       Assert.Equal(0, result);
     }
@@ -36,17 +37,47 @@ namespace HairSalon
     {
       DateTime testDate = new DateTime(2016, 3, 14);
       Client testClient = new Client("Joe", 1, testDate);
+
       testClient.Save();
 
       List<Client> result = Client.GetAll();
       List<Client> testList = new List<Client>{testClient};
 
-      Assert.Equal(result, testList); 
+      Assert.Equal(result, testList);
+    }
+
+    [Fact]
+    public void Test_Save_AssignsIdToObject()
+    {
+      DateTime testDate = new DateTime(2016, 3, 14);
+      Client testClient = new Client("Joe", 1, testDate);
+
+      testClient.Save();
+
+      Client savedClient = Client.GetAll()[0];
+
+      int result = savedClient.GetId();
+      int testId = testClient.GetId();
+
+      Assert.Equal(testId, result);
+
+    }
+
+    [Fact]
+    public void Test_Find_FindsClientInDatabase()
+    {
+      DateTime testDate = new DateTime(2016, 3, 14);
+      Client testClient = new Client("Joe", 1, testDate);
+      testClient.Save();
+
+      Client foundClient = Client.Find(testClient.GetId());
+
+      Assert.Equal(testClient, foundClient); 
     }
 
     public void Dispose()
     {
-      Stylist.DeleteAll();
+      Client.DeleteAll();
     }
   }
 }

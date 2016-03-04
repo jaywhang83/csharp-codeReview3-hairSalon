@@ -241,8 +241,82 @@ namespace HairSalon
 
       if(conn != null)
       {
-        conn.Close(); 
+        conn.Close();
       }
+    }
+
+    public static Client Search(string name)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM clients WHERE name = @ClientName;", conn);
+      SqlParameter clientNameParameter = new SqlParameter();
+      clientNameParameter.ParameterName = "@ClientName";
+      clientNameParameter.Value = name;
+      cmd.Parameters.Add(clientNameParameter);
+      rdr = cmd.ExecuteReader();
+
+      int foundClientId = 0;
+      string foundClientName = null;
+      int foundClientStylistId = 0;
+      DateTime foundClientDate = new DateTime();
+
+      while(rdr.Read())
+      {
+        foundClientId = rdr.GetInt32(0);
+        foundClientName = rdr.GetString(1);
+        foundClientStylistId = rdr.GetInt32(2);
+        foundClientDate = rdr.GetDateTime(3);
+      }
+
+      Client foundClient = new Client(foundClientName, foundClientStylistId, foundClientDate, foundClientId);
+
+      if(rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+      return foundClient;
+    }
+
+    public  Stylist GetStylist()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM stylists WHERE id = @StylsitId;", conn);
+      SqlParameter stylistIdParameter = new SqlParameter();
+      stylistIdParameter.ParameterName = "@StylsitId";
+      stylistIdParameter.Value = this.GetStylistId();
+      cmd.Parameters.Add(stylistIdParameter);
+      rdr = cmd.ExecuteReader();
+
+      int foundStylistId = 0;
+      string foundStylistName = null;
+
+      while(rdr.Read())
+      {
+        foundStylistId = rdr.GetInt32(0);
+        foundStylistName = rdr.GetString(1);
+      }
+
+      Stylist foundStylist = new Stylist(foundStylistName, foundStylistId);
+
+      if(rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+      return foundStylist;
     }
 
     public static void DeleteAll()

@@ -21,6 +21,16 @@ namespace HairSalon
       Assert.Equal(0, result);
     }
 
+    [Fact]
+    public void Test_Equal_overrideTrueForSameName()
+    {
+      DateTime testDate = new DateTime(2016, 3, 14);
+      Client firstClient = new Client("Joe", 1, testDate);
+      Client secondClient = new Client("Joe", 1, testDate);
+
+      Assert.Equal(firstClient, secondClient); 
+    }
+
     public void Dispose()
     {
       Stylist.DeleteAll();

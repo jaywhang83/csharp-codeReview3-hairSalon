@@ -9,12 +9,14 @@ namespace HairSalon
     private int Id;
     private string Name;
     private int StylistId;
+    private DateTime AppointmentDate;
 
-    public Client(string name, int stylistId, int id = 0)
+    public Client(string name, int stylistId, DateTime appointmentDate, int id = 0)
     {
       Id = id;
       Name = name;
       StylistId = stylistId;
+      AppointmentDate = appointmentDate;
     }
 
     public int GetId()
@@ -28,6 +30,10 @@ namespace HairSalon
     public int GetStylistId()
     {
       return StylistId;
+    }
+    public DateTime GetAppointmentDate()
+    {
+      return AppointmentDate;
     }
 
     public void SetId(int id)
@@ -43,12 +49,27 @@ namespace HairSalon
       StylistId = stylistId;
     }
 
-    public static void DeleteAll()
+    public void SetStylistId(DateTime appointmentDate)
     {
-      SqlConnection conn = DB.Connection();
-      conn.Open();
-      SqlCommand cmd = new SqlCommand("DELETE FROM clients;", conn);
-      cmd.ExecuteNonQuery();
+      AppointmentDate = appointmentDate;
+    }
+
+    public override bool Equals(System.Object otherClient)
+    {
+      if(!(otherClient is Client))
+      {
+        return false;
+      }
+      else
+      {
+          Client newClient = (Client) otherClient;
+          bool idEquality = this.GetId() == newClient.GetId();
+          bool nameEquality = this.GetName() == newClient.GetName();
+          bool stylistIdEquality = this.GetStylistId() == newClient.GetStylistId();
+          bool appointMentDateEquality = this.GetAppointmentDate() == newClient.GetAppointmentDate();
+
+          return (idEquality && nameEquality && stylistIdEquality && appointMentDateEquality);
+      }
     }
 
     public static List<Client> GetAll()
@@ -59,7 +80,7 @@ namespace HairSalon
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT * FROM clients ORDER BY Name DESC;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT * FROM clients ORDER BY appointment_date DESC;", conn);
       rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
@@ -67,8 +88,9 @@ namespace HairSalon
         int clientId = rdr.GetInt32(0);
         string clientName = rdr.GetString(1);
         int clientStylistId = rdr.GetInt32(2);
+        DateTime clientAppointmentDate = rdr.GetDateTime(3);
 
-        Client newClient = new Client(clientName, clientStylistId, clientId);
+        Client newClient = new Client(clientName, clientStylistId, clientAppointmentDate, clientId);
         allClients.Add(newClient);
       }
 
@@ -80,7 +102,15 @@ namespace HairSalon
       {
         conn.Close();
       }
-      return allClients; 
+      return allClients;
+    }
+
+    public static void DeleteAll()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("DELETE FROM clients;", conn);
+      cmd.ExecuteNonQuery();
     }
   }
 }

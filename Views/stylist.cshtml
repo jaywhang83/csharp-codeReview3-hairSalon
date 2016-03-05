@@ -21,13 +21,15 @@
     </ol>
 
       <h1>Add a new client</h1>
-      <form action="/client/add/" method="post">
+      <form action="/client/add" method="post">
         <label for="client-name">Client name:</label>
         <input id="client-name" name="client-name" type="text">
         <label for="client-appointment-date">Appointment date:</label>
         <input id="client-appointment-date" name="client-appointment-date" type="text">
         <label for="client-note">Notes:</label>
         <input id="client-note" name="client-note" type="text">
+        <input type="hidden" name="_method" value="PATCH">
+        <input name="stylist-id" type="hidden" value="@Model["stylists"].GetId()">
         <button type="submit">Add a new client</button>
       </form>
       <h4><a href="/">Back to main</a></h4>

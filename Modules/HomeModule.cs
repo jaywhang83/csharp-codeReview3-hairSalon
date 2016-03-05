@@ -55,7 +55,7 @@ namespace HairSalon
         Dictionary<string, object> model = new Dictionary<string, object> ();
         var selectedStylist = Stylist.Find(Parameters.id);
         var stylistClients = selectedStylist.GetClients();
-        model.Add("stylist", selectedStylist);
+        model.Add("stylists", selectedStylist);
         model.Add("clients", stylistClients);
         return View["stylist.cshtml", model];
       };
@@ -87,8 +87,6 @@ namespace HairSalon
         selectedStylist.Delete();
         return View["deleted.cshtml"];
       };
-
-
       Get["/client/edit/{id}"] = parameters =>
       {
         Client selectedClient = Client.Find(parameters.id);

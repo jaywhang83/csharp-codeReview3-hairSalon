@@ -275,18 +275,13 @@ namespace HairSalon
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT * FROM clients WHERE name = @ClientName;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT * FROM clients WHERE name LIKE @ClientName;", conn);
       SqlParameter clientNameParameter = new SqlParameter();
       clientNameParameter.ParameterName = "@ClientName";
       clientNameParameter.Value = name;
       cmd.Parameters.Add(clientNameParameter);
       rdr = cmd.ExecuteReader();
 
-      // int foundClientId = 0;
-      // string foundClientName = null;
-      // int foundClientStylistId = 0;
-      // DateTime foundClientDate = new DateTime();
-      // string foundClientNote = null;
       List<Client> clients = new List<Client> {};
       while(rdr.Read())
       {

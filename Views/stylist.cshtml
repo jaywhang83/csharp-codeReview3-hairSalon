@@ -12,7 +12,7 @@
     <ol>
       @foreach(var client in @Model["clients"])
       {
-        <li>@client.GetName()</li>
+        <li>@client.GetName() <a href="/client/edit/@client.GetId()">Edit</a> | <a href="/client/delete/@client.GetId()">Delete</a></li>
           <ul>
             <li>@client.GetAppointmentDate()</li>
             <li>@client.GetNote()</li>
@@ -22,7 +22,7 @@
 
       <h1>Add a new client</h1>
       <form action="/client/add/" method="post">
-        <label for="client-name">Restaurant name:</label>
+        <label for="client-name">Client name:</label>
         <input id="client-name" name="client-name" type="text">
         <label for="client-appointment-date">Appointment date:</label>
         <input id="client-appointment-date" name="client-appointment-date" type="text">
